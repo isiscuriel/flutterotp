@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "847776641310",
+    "project_id": "sample-otp-app-f81c9",
+    "storage_bucket": "sample-otp-app-f81c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847776641310:android:2076d625a9c3aa1e33590f",
+        "android_client_info": {
+          "package_name": "com.isis.sampleotp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoKpOX_j6XA5JSFElMvo9SqAZM5yT-7TQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847776641310:android:174e9aa0fd3c10a833590f",
+        "android_client_info": {
+          "package_name": "com.sampleotp.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoKpOX_j6XA5JSFElMvo9SqAZM5yT-7TQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
