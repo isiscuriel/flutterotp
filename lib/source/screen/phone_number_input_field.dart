@@ -1,5 +1,8 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sample_app/source/bloc/auth_cubit.dart';
+import 'package:sample_app/source/bloc/auth_state.dart';
 import 'package:sample_app/source/screen/otp_input_field.dart';
 import 'package:sample_app/source/utils/colors.dart';
 
@@ -8,6 +11,7 @@ class PhoneNumberScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController phoneController = TextEditingController();
     return Scaffold(
       body: Center(
         child: Column(
@@ -42,6 +46,7 @@ class PhoneNumberScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             TextFormField(
+              controller: phoneController,
               decoration: const InputDecoration(
                 labelText: 'Phone Number',
                 hintText: 'Enter your phone number',
@@ -49,19 +54,29 @@ class PhoneNumberScreen extends StatelessWidget {
               keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                //TODO add proper routes
-                //TODO add logic to send sms code
-                //TODO add logic to navigate to otp screen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const OtpScreen(),
-                  ),
+            BlocConsumer<AuthCubit, AuthState>(
+              listener: (context, state) {
+                if (state is AuthCodeSentState) {
+                  //TODO add proper routes
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const OtpScreen()));
+                }
+              },
+              builder: (context, state) {
+                if (state is AuthLoadingState) {
+                  return const CircularProgressIndicator();
+                }
+                return ElevatedButton(
+                  onPressed: () {
+                    //Note will only support USA phone numbers for now
+                    String phoneNumber = "+1${phoneController.text}";
+                    BlocProvider.of<AuthCubit>(context).sendOtp(phoneNumber);
+                  },
+                  child: const Text('Send Message'),
                 );
               },
-              child: const Text('Send Message'),
             ),
           ],
         ),

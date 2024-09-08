@@ -1,6 +1,8 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sample_app/source/bloc/auth_cubit.dart';
+import 'package:sample_app/source/bloc/auth_state.dart';
 import 'package:sample_app/source/bloc/otp_bloc.dart';
 import 'package:sample_app/source/screen/welcome.dart';
 import 'package:sample_app/source/utils/colors.dart';
@@ -12,10 +14,7 @@ class OtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => OtpBloc(),
-      child: const OtpForm(),
-    );
+    return OtpForm();
   }
 }
 
@@ -27,92 +26,100 @@ class OtpForm extends StatefulWidget {
 }
 
 class _OtpFormState extends State<OtpForm> {
-  final TextEditingController _otpController = TextEditingController();
+  final TextEditingController otpController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<OtpBloc, OtpState>(
-      listener: (context, state) {
-        if (state is OtpSuccess) {
-          // Handle successful OTP verification
-        } else if (state is OtpFailure) {
-          // Handle OTP verification failure
-        }
-      },
-      builder: (context, state) {
-        return Scaffold(
-          body: Form(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 90.0),
-                  child: Text(
-                    'Registration',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    return Scaffold(
+      body: Form(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(top: 90.0),
+              child: Text(
+                'Registration',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+            DotsIndicator(
+                dotsCount: 3,
+                position: 1,
+                decorator: const DotsDecorator(
+                  size: Size.square(5.0),
+                  activeColor: AppColors.primaryColor,
+                )),
+            SizedBox(
+                width: double.infinity,
+                height: 250,
+                child: SvgPicture.asset("assets/images/womanandchild.svg")),
+            const Text(
+              'Verfication',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const Text(
+              'You will get a six-digit verfication code\n that is time-limited.',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 30, right: 30),
+              child: PinFieldAutoFill(
+                textInputAction: TextInputAction.done,
+                autoFocus: true,
+                decoration: BoxLooseDecoration(
+                  textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400, //300
+                      color: Colors.white70,
+                      fontFamily: 'lato'),
+                  radius: const Radius.circular(8),
+                  strokeColorBuilder: const FixedColorBuilder(
+                    Color.fromRGBO(255, 200, 49, 0.45),
                   ),
                 ),
-                DotsIndicator(
-                    dotsCount: 3,
-                    position: 1,
-                    decorator: const DotsDecorator(
-                      size: Size.square(5.0),
-                      activeColor: AppColors.primaryColor,
-                    )),
-                SizedBox(
-                    width: double.infinity,
-                    height: 250,
-                    child: SvgPicture.asset("assets/images/womanandchild.svg")),
-                const Text(
-                  'Verfication',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const Text(
-                  'You will get a six-digit verfication code\n that is time-limited.',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(left: 30, right: 30),
-                  child: PinFieldAutoFill(
-                    textInputAction: TextInputAction.done,
-                    autoFocus: true,
-                    decoration: BoxLooseDecoration(
-                      textStyle: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400, //300
-                          color: Colors.white70,
-                          fontFamily: 'lato'),
-                      radius: const Radius.circular(8),
-                      strokeColorBuilder: const FixedColorBuilder(
-                        Color.fromRGBO(255, 200, 49, 0.45),
-                      ),
-                    ),
-                    codeLength: 6,
-                    onCodeChanged: (code) {},
-                    onCodeSubmitted: (val) {},
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    //TODO if verfied then navigated
-                    //TODO add proper routes
-                    Navigator.push(
+                controller: otpController,
+                codeLength: 6,
+                onCodeChanged: (code) {},
+                onCodeSubmitted: (val) {},
+              ),
+            ),
+            const SizedBox(height: 16),
+            BlocConsumer<AuthCubit, AuthState>(
+              listener: (context, state) {
+                if (state is AuthLoggedInState) {
+                  Navigator.popUntil(context, (route) => route.isFirst);
+                  Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const WelcomeScreen(),
-                      ),
-                    );
+                          builder: (context) => const WelcomeScreen()));
+                } else if (state is AuthErrorState) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.errorMessage),
+                      backgroundColor: AppColors.primaryColor,
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                if (state is AuthLoadingState) {
+                  return const CircularProgressIndicator();
+                }
+                return ElevatedButton(
+                  onPressed: () {
+                    //TODO add proper routes
+                    BlocProvider.of<AuthCubit>(context)
+                        .verifyOtp(otpController.text);
                   },
                   child: const Text('Verify OTP'),
-                ),
-              ],
+                );
+              },
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 }

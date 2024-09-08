@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sample_app/source/bloc/auth_cubit.dart';
+import 'package:sample_app/source/bloc/auth_state.dart';
 import 'package:sample_app/source/navigation/get_started.dart';
 import 'package:sample_app/source/screen/otp_input_field.dart';
 
@@ -20,17 +23,24 @@ class WelcomeScreen extends StatelessWidget {
               style: TextStyle(fontSize: 24),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                //TODO add proper routes
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const GetStartedScreen(),
-                  ),
+            BlocConsumer<AuthCubit, AuthState>(
+              listener: (context, state) {
+                if (state is AuthLoggedOutState) {
+                  Navigator.popUntil(context, (route) => route.isFirst);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const GetStartedScreen()));
+                }
+              },
+              builder: (context, state) {
+                return ElevatedButton(
+                  onPressed: () {
+                    BlocProvider.of<AuthCubit>(context).logOut();
+                  },
+                  child: const Text('Logout'),
                 );
               },
-              child: const Text('Logout'),
             ),
           ],
         ),
