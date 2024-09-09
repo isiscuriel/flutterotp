@@ -13,16 +13,19 @@ class PhoneNumberScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController phoneController = TextEditingController();
     return Scaffold(
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          //mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 90.0),
-              child: Text(
+            Padding(
+              padding: const EdgeInsets.only(top: 90.0),
+              child: const Text(
                 'Registration',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
+            ),
+            const SizedBox(
+              height: 10,
             ),
             DotsIndicator(
                 dotsCount: 3,
@@ -33,27 +36,51 @@ class PhoneNumberScreen extends StatelessWidget {
                 )),
             SizedBox(
                 width: double.infinity,
-                height: 400,
+                height: 250,
                 child: Image.asset(
                     "assets/images/arab-woman-sitting-on-stool.png")),
+            const SizedBox(
+              height: 20,
+            ),
             const Text(
               'Enter your phone number',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
+            const SizedBox(
+              height: 20,
+            ),
             const Text(
               'We will send a code (via SMS text\nmessage) to your phone number',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
             ),
             const SizedBox(height: 20),
-            TextFormField(
-              controller: phoneController,
-              decoration: const InputDecoration(
-                labelText: 'Phone Number',
-                hintText: 'Enter your phone number',
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                color: Colors.grey.shade100,
+                height: 50,
+                width: MediaQuery.of(context).size.width * 0.70,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: TextFormField(
+                    //TODO readd formater when can handle seperating
+                    //inputFormatters: [MaskedInputFormatter('(###) ###-####')],
+                    style: const TextStyle(
+                      color: AppColors.blackColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    controller: phoneController,
+                    maxLength: 10,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Enter your phone number',
+                    ),
+                    keyboardType: TextInputType.phone,
+                  ),
+                ),
               ),
-              keyboardType: TextInputType.phone,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) {
                 if (state is AuthCodeSentState) {
@@ -68,13 +95,17 @@ class PhoneNumberScreen extends StatelessWidget {
                 if (state is AuthLoadingState) {
                   return const CircularProgressIndicator();
                 }
-                return ElevatedButton(
-                  onPressed: () {
-                    //Note will only support USA phone numbers for now
-                    String phoneNumber = "+1${phoneController.text}";
-                    BlocProvider.of<AuthCubit>(context).sendOtp(phoneNumber);
-                  },
-                  child: const Text('Send Message'),
+                return SizedBox(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width * 0.70,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      //Note will only support USA phone numbers for now
+                      String phoneNumber = "+1${phoneController.text}";
+                      BlocProvider.of<AuthCubit>(context).sendOtp(phoneNumber);
+                    },
+                    child: const Text('Send Message'),
+                  ),
                 );
               },
             ),

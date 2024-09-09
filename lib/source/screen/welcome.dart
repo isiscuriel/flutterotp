@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sample_app/source/bloc/auth_cubit.dart';
 import 'package:sample_app/source/bloc/auth_state.dart';
 import 'package:sample_app/source/navigation/get_started.dart';
-import 'package:sample_app/source/screen/otp_input_field.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
