@@ -13,7 +13,7 @@ class OtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OtpForm();
+    return const OtpForm();
   }
 }
 

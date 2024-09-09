@@ -21,14 +21,14 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
         builder: (BuildContext context, BoxConstraints constraints) {
       // Check the available width and height in constraints
       double availableWidth = constraints.maxWidth;
-      double availableHeight = constraints.maxHeight;
+      //double availableHeight = constraints.maxHeight;
       return SingleChildScrollView(
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 90.0),
-              child: const Text(
+            const Padding(
+              padding: EdgeInsets.only(top: 90.0),
+              child: Text(
                 'Registration',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
