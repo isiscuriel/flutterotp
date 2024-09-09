@@ -1,16 +1,19 @@
 # sample_app
 
-A new Flutter project.
+A Sample otp app using firebase auth to get more familar with bloc and CLEAN principles.
 
-## Getting Started
+Testing phone Number is : 2345678901
+Otp : 111111
 
-This project is a starting point for a Flutter application.
+Disclaimers : 
+need to test on ios to make sure otp is sending correctly. 
+dribble I got inspo from : https://dribbble.com/shots/13952524-Mobile-Number-Verification/attachments/5564236?mode=media (idk how to download to get the correct positioning/sizes so I guess estimated )
 
-A few resources to get you started if this is your first Flutter project:
+Further Todos : 
+add routes
+add mediaquery 
+add validators to phone number and otp code
+beautify the text fields
+add profile section 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+.
