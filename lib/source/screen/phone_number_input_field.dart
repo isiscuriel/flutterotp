@@ -6,9 +6,14 @@ import 'package:sample_app/source/bloc/auth_state.dart';
 import 'package:sample_app/source/screen/otp_input_field.dart';
 import 'package:sample_app/source/utils/colors.dart';
 
-class PhoneNumberScreen extends StatelessWidget {
+class PhoneNumberScreen extends StatefulWidget {
   const PhoneNumberScreen({super.key});
 
+  @override
+  State<PhoneNumberScreen> createState() => _PhoneNumberScreenState();
+}
+
+class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   @override
   Widget build(BuildContext context) {
     TextEditingController phoneController = TextEditingController();
