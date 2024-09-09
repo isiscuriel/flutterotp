@@ -17,8 +17,12 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   @override
   Widget build(BuildContext context) {
     TextEditingController phoneController = TextEditingController();
-    return Scaffold(
-      body: SingleChildScrollView(
+    return Scaffold(body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      // Check the available width and height in constraints
+      double availableWidth = constraints.maxWidth;
+      double availableHeight = constraints.maxHeight;
+      return SingleChildScrollView(
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -64,7 +68,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
               child: Container(
                 color: Colors.grey.shade100,
                 height: 50,
-                width: MediaQuery.of(context).size.width * 0.70,
+                width: availableWidth * 0.70,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: TextFormField(
@@ -102,7 +106,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                 }
                 return SizedBox(
                   height: 50,
-                  width: MediaQuery.of(context).size.width * 0.70,
+                  width: availableWidth * 0.70,
                   child: ElevatedButton(
                     onPressed: () {
                       //Note will only support USA phone numbers for now
@@ -116,7 +120,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
             ),
           ],
         ),
-      ),
-    );
+      );
+    }));
   }
 }
